@@ -28,7 +28,7 @@ path = "examples/axum_calendar_example.rs"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 schemars = { version = "1.0", features = ["uuid1", "chrono04"] }
-reqwest = { version = "0.12", features = ["json", "blocking"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "blocking", "rustls-tls", "charset", "http2", "system-proxy"] }
 anyhow = "1.0"
 chrono = { version = "0.4", features = ["serde", "alloc"] }
 
