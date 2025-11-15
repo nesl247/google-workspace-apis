@@ -549,6 +549,16 @@ impl<'a> CalendarEventsClient<'a, EventInsertMode> {
         self.modify_event(|event| event.id = Some(id.to_string()))
     }
 
+    /// Sets the iCalendar UID for the event.
+    /// This UID is used for deduplication across calendars in apps like Fantastical.
+    ///
+    /// # Arguments
+    ///
+    /// * `ical_uid` - The iCalendar UID to set for the event
+    pub fn set_ical_uid(self, ical_uid: &str) -> Self {
+        self.modify_event(|event| event.ical_uid = Some(ical_uid.to_string()))
+    }
+
     /// Sets the out of office properties for the event.
     ///
     /// # Arguments

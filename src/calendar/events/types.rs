@@ -1285,6 +1285,10 @@ pub struct CreateEventRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 
+    /// Event unique identifier as defined in RFC5545 (iCalendar UID)
+    #[serde(skip_serializing_if = "Option::is_none", rename = "iCalUID")]
+    pub ical_uid: Option<String>,
+
     /// Geographic location of the event
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -1372,6 +1376,7 @@ impl CreateEventRequest {
             guests_can_modify: None,
             guests_can_see_other_guests: None,
             id: None,
+            ical_uid: None,
             location: None,
             out_of_office_properties: None,
             recurrence: vec![],
