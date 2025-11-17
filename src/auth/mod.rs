@@ -132,9 +132,12 @@ pub async fn get_acces_token(
                     }),
                 )
             } else {
+                let status = response.status();
+                let error_body = response.text().await.unwrap_or_else(|_| "Unable to read error body".to_string());
                 Err(anyhow::anyhow!(
-                    "Failed to retrieve access token: {}",
-                    response.status()
+                    "Failed to retrieve access token: {} - {}",
+                    status,
+                    error_body
                 ))
             }
         }
@@ -173,7 +176,9 @@ pub async fn refresh_acces_token(
                 };
                 Ok(token)
             } else {
-                Err(anyhow!("Failed to refresh token: {}", response.status()))
+                let status = response.status();
+                let error_body = response.text().await.unwrap_or_else(|_| "Unable to read error body".to_string());
+                Err(anyhow!("Failed to refresh token: {} - {}", status, error_body))
             }
         }
         Err(e) => Err(anyhow!("Request error: {e}")),
