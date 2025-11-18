@@ -373,7 +373,9 @@ impl<'a, T> CalendarEventsClient<'a, T> {
         if res.status().is_success() {
             Ok(true)
         } else {
-            Ok(false)
+            let status = res.status();
+            let body = res.text().await.unwrap_or_default();
+            Err(anyhow!("Delete request failed with status {}: {}", status, body))
         }
     }
     pub(super) async fn make_request<R>(&mut self) -> Result<Option<R>, Error>
@@ -395,7 +397,9 @@ impl<'a, T> CalendarEventsClient<'a, T> {
                 if res.status().is_success() {
                     Ok(Some(res.json().await?))
                 } else {
-                    Ok(None)
+                    let status = res.status();
+                    let body = res.text().await.unwrap_or_default();
+                    Err(anyhow!("GET request failed with status {}: {}", status, body))
                 }
             }
 
@@ -413,7 +417,9 @@ impl<'a, T> CalendarEventsClient<'a, T> {
                 if res.status().is_success() {
                     Ok(Some(res.json().await?))
                 } else {
-                    Ok(None)
+                    let status = res.status();
+                    let body = res.text().await.unwrap_or_default();
+                    Err(anyhow!("POST request failed with status {}: {}", status, body))
                 }
             }
 
@@ -431,7 +437,9 @@ impl<'a, T> CalendarEventsClient<'a, T> {
                 if res.status().is_success() {
                     Ok(Some(res.json().await?))
                 } else {
-                    Ok(None)
+                    let status = res.status();
+                    let body = res.text().await.unwrap_or_default();
+                    Err(anyhow!("PATCH request failed with status {}: {}", status, body))
                 }
             }
 
