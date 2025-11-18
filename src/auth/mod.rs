@@ -163,6 +163,13 @@ pub async fn refresh_acces_token(
         Ok(response) => {
             if response.status().is_success() {
                 let json: serde_json::Value = response.json().await?;
+                // Google may return a new refresh token during rotation
+                // If present, use the new one; otherwise, keep the existing one
+                let refresh_token = json["refresh_token"]
+                    .as_str()
+                    .map(|s| s.to_string())
+                    .unwrap_or_else(|| client_credentials.refresh_token.clone());
+                
                 let token = AccessToken {
                     token_type: json["token_type"].as_str().unwrap_or_default().to_string(),
                     access_token: json["access_token"]
@@ -170,7 +177,7 @@ pub async fn refresh_acces_token(
                         .unwrap_or_default()
                         .to_string(),
                     expires_in: json["expires_in"].as_i64().unwrap_or(0),
-                    refresh_token: client_credentials.refresh_token.clone(),
+                    refresh_token,
                     refresh_token_expires_in: 0,
                     scope: json["scope"].as_str().unwrap_or_default().to_string(),
                 };
