@@ -588,6 +588,28 @@ impl<'a> CalendarEventsClient<'a, EventInsertMode> {
         self.modify_event(|event| event.recurrence = recurrence)
     }
 
+    /// Sets the reminder settings for the event.
+    ///
+    /// # Arguments
+    ///
+    /// * `reminders` - EventReminders containing useDefault and optional overrides
+    ///
+    /// # Example
+    ///
+    /// To disable all reminders (including calendar defaults):
+    /// ```rust
+    /// use google_workspace_apis::calendar::events::types::EventReminders;
+    ///
+    /// let no_reminders = EventReminders {
+    ///     use_default: Some(false),
+    ///     overrides: vec![],
+    /// };
+    /// builder.set_reminders(no_reminders);
+    /// ```
+    pub fn set_reminders(self, reminders: EventReminders) -> Self {
+        self.modify_event(|event| event.reminders = Some(reminders))
+    }
+
     /// Executes the request to create the event.
     ///
     /// # Returns
