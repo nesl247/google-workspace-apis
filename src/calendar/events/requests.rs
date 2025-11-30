@@ -11,7 +11,7 @@ use serde::{de::DeserializeOwned, Serialize};
 
 use super::types::{
     BirthdayProperties, Event, EventAttendee, EventList, EventReminders, EventSource,
-    OutOfOfficeProperties, PatchEventRequest, WorkingLocationProperties,
+    ExtendedProperties, OutOfOfficeProperties, PatchEventRequest, WorkingLocationProperties,
 };
 
 /// Indicates that the request builder is not yet initialized with a specific mode.
@@ -610,6 +610,35 @@ impl<'a> CalendarEventsClient<'a, EventInsertMode> {
         self.modify_event(|event| event.reminders = Some(reminders))
     }
 
+    /// Sets the extended properties for the event.
+    ///
+    /// Extended properties allow storing custom key-value pairs on events.
+    /// - `private`: Properties visible only to this calendar
+    /// - `shared`: Properties visible to all attendees
+    ///
+    /// # Arguments
+    ///
+    /// * `extended_properties` - ExtendedProperties containing private and/or shared properties
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use google_workspace_apis::calendar::events::types::ExtendedProperties;
+    /// use std::collections::HashMap;
+    ///
+    /// let mut private_props = HashMap::new();
+    /// private_props.insert("myApp_syncId".to_string(), "abc123".to_string());
+    ///
+    /// let extended = ExtendedProperties {
+    ///     private: Some(private_props),
+    ///     shared: None,
+    /// };
+    /// builder.set_extended_properties(extended);
+    /// ```
+    pub fn set_extended_properties(self, extended_properties: ExtendedProperties) -> Self {
+        self.modify_event(|event| event.extended_properties = Some(extended_properties))
+    }
+
     /// Executes the request to create the event.
     ///
     /// # Returns
@@ -855,6 +884,19 @@ impl<'a> CalendarEventsClient<'a, EventPatchMode> {
     /// * `properties` - WorkingLocationProperties
     pub fn set_working_location_properties(self, properties: WorkingLocationProperties) -> Self {
         self.modify_event(|event| event.working_location_properties = Some(properties))
+    }
+
+    /// Patch the extended properties field
+    ///
+    /// Extended properties allow storing custom key-value pairs on events.
+    /// - `private`: Properties visible only to this calendar
+    /// - `shared`: Properties visible to all attendees
+    ///
+    /// # Arguments
+    ///
+    /// * `extended_properties` - ExtendedProperties containing private and/or shared properties
+    pub fn set_extended_properties(self, extended_properties: ExtendedProperties) -> Self {
+        self.modify_event(|event| event.extended_properties = Some(extended_properties))
     }
 
     /// Set the query parameter sendUpdates
