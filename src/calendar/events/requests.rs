@@ -588,6 +588,15 @@ impl<'a> CalendarEventsClient<'a, EventInsertMode> {
         self.modify_event(|event| event.recurrence = recurrence)
     }
 
+    /// Sets the transparency of the event (whether it blocks time on the calendar).
+    ///
+    /// # Arguments
+    ///
+    /// * `transparency` - Either "opaque" (blocks time) or "transparent" (does not block time)
+    pub fn set_transparency(self, transparency: &str) -> Self {
+        self.modify_event(|event| event.transparency = Some(transparency.to_string()))
+    }
+
     /// Sets the reminder settings for the event.
     ///
     /// # Arguments
