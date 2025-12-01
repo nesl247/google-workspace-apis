@@ -1111,6 +1111,7 @@ pub struct EventList {
 }
 
 #[derive(Debug, Serialize, Deserialize, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct PatchEventRequest {
     /// The (exclusive) end time of the event
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1222,6 +1223,7 @@ pub struct PatchEventRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateEventRequest {
     /// Required: The (exclusive) end time of the event
     pub end: EventDateTime,
